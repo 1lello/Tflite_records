@@ -1,7 +1,3 @@
-
-# Script to create CSV data file from Pascal VOC annotation files
-# Based off code from GitHub user datitran: https://github.com/datitran/raccoon_dataset/blob/master/xml_to_csv.py
-
 import os
 import glob
 import pandas as pd
@@ -12,19 +8,32 @@ def xml_to_csv(path):
     for xml_file in glob.glob(path + '/*.xml'):
         tree = ET.parse(xml_file)
         root = tree.getroot()
+        
+        # Read the filename from the 'filename' tag
+        filename = root.find('filename').text
+        
+        # Read the image width and height from the 'size' tag
+        width = int(root.find('size').find('width').text)
+        height = int(root.find('size').find('height').text)
+        
+        # Iterate over each 'object' tag in the XML
         for member in root.findall('object'):
-            value = (root.find('filename').text,
-                     int(root.find('size').find('width').text),
-                     int(root.find('size').find('height').text),
-                     member.find('name').text,
-                     int(member.find('bndbox').find('xmin').text),
-                     int(member.find('bndbox').find('ymin').text),
-                     int(member.find('bndbox').find('xmax').text),
-                     int(member.find('bndbox').find('ymax').text)
-                     )
-            xml_list.append(value)
+            # Read the class name from the 'name' tag within the 'object' tag
+            class_name = member.find('name').text
+            
+            # Read the bounding box coordinates from the 'bndbox' tag within the 'object' tag
+            xmin = int(member.find('bndbox').find('xmin').text)
+            ymin = int(member.find('bndbox').find('ymin').text)
+            xmax = int(member.find('bndbox').find('xmax').text)
+            ymax = int(member.find('bndbox').find('ymax').text)
+            
+            # Append the extracted information as a tuple to the xml_list
+            xml_list.append((filename, width, height, class_name, xmin, ymin, xmax, ymax))
+    
+    # Create a DataFrame from the xml_list
     column_name = ['filename', 'width', 'height', 'class', 'xmin', 'ymin', 'xmax', 'ymax']
     xml_df = pd.DataFrame(xml_list, columns=column_name)
+    
     return xml_df
 
 def main():
@@ -35,3 +44,4 @@ def main():
         print('Successfully converted xml to csv.')
 
 main()
+
