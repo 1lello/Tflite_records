@@ -59,7 +59,7 @@ def create_tf_example(group, path):
 
     labels = [line.strip() for line in f.readlines() if line.strip()]
     with open(FLAGS.labelmap, 'r') as f:
-    	labels = [line.strip() for line in f.readlines() if line.strip()]
+        labels = [line.strip() for line in f.readlines() if line.strip()]
 
     for index, row in group.object.iterrows():
         xmins.append(row['xmin'] / width)
@@ -105,12 +105,12 @@ def main(_):
     # Create labelmap.pbtxt file
     path_to_labeltxt = os.path.join(os.getcwd(), FLAGS.labelmap)
     with open(path_to_labeltxt, 'r') as f:
-    	labels = [line.strip() for line in f.readlines() if line.strip()]
+        labels = [line.strip() for line in f.readlines() if line.strip()]
     
     path_to_labelpbtxt = os.path.join(os.getcwd(), 'labelmap.pbtxt')
     with open(path_to_labelpbtxt,'w') as f:
-            for i, label in enumerate(labels):
-            	f.write('item {\n' +
+        for i, label in enumerate(labels):
+            f.write('item {\n' +
                     '  id: %d\n' % (i + 1) +
                     '  name: \'%s\'\n' % label +
                     '}\n' +
