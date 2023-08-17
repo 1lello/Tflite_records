@@ -66,7 +66,7 @@ def create_tf_example(group, path):
         xmaxs.append(row['xmax'] / width)
         ymins.append(row['ymin'] / height)
         ymaxs.append(row['ymax'] / height)
-        classes_text.append(row['class'].encode('utf8'))
+        classes_text.append(str(row['class']).encode('utf8'))
         classes.append(int(labels.index(row['class'])+1))
 
     tf_example = tf.train.Example(features=tf.train.Features(feature={
