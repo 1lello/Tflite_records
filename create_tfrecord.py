@@ -109,7 +109,7 @@ def main(_):
     
     path_to_labelpbtxt = os.path.join(os.getcwd(), 'labelmap.pbtxt')
     with open(path_to_labelpbtxt,'w') as f:
-        for i, label in enumerate(labels):
+            for i, label in enumerate(labels):
             f.write('item {\n' +
                     '  id: %d\n' % (i + 1) +
                     '  name: \'%s\'\n' % label +
