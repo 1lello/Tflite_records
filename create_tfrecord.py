@@ -87,10 +87,21 @@ def create_tf_example(group, path):
 
 
 def main(_):
+    # Check if the 'images' directory exists; if not, create it
+    images_dir = os.path.join(os.getcwd(), 'images')
+    if not os.path.exists(images_dir):
+        os.makedirs(images_dir)
+        print('Created directory:', images_dir)
+
     # Load and prepare data
     writer = tf.python_io.TFRecordWriter(FLAGS.output_path)
     path = os.path.join(os.getcwd(), FLAGS.image_dir)
-    examples = pd.read_csv(FLAGS.csv_input)
+    
+    # Check if the specified CSV file exists
+    if not os.path.isfile(FLAGS.csv_input):
+        print('Error: Specified CSV file does not exist:', FLAGS.csv_input)
+        return
+examples = pd.read_csv(FLAGS.csv_input)
 
     # Create TFRecord files
     grouped = split(examples, 'filename')
