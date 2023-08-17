@@ -19,7 +19,7 @@ import io
 import pandas as pd
 
 from tensorflow.python.framework.versions import VERSION
-if VERSION <= "2.0.0a0":
+if VERSION >= "2.0.0a0":
     import tensorflow.compat.v1 as tf
 else:
     import tensorflow as tf
