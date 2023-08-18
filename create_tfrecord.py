@@ -57,9 +57,9 @@ def create_tf_example(group, path):
     classes_text = []
     classes = []
 
-    labels = [line.strip() for line in f.readlines() if line.strip()]
+    labels = []
     with open(FLAGS.labelmap, 'r') as f:
-        labels = [line.strip() for line in f.readlines() if line.strip()]
+        labels = [line.strip() for line in f.readlines()]
 
     for index, row in group.object.iterrows():
         xmins.append(row['xmin'] / width)
@@ -67,7 +67,9 @@ def create_tf_example(group, path):
         ymins.append(row['ymin'] / height)
         ymaxs.append(row['ymax'] / height)
         classes_text.append(str(row['class']).encode('utf8'))
-    classes.append(labels.index(str(row['class'])) + 1)
+        classes.append(int(row['class']))
+        #classes_text.append(row['class'].encode('utf8'))
+        #classes.append(int(labels.index(row['class'])+1))
 
     tf_example = tf.train.Example(features=tf.train.Features(feature={
         'image/height': dataset_util.int64_feature(height),
@@ -105,7 +107,7 @@ def main(_):
     # Create labelmap.pbtxt file
     path_to_labeltxt = os.path.join(os.getcwd(), FLAGS.labelmap)
     with open(path_to_labeltxt, 'r') as f:
-        labels = [line.strip() for line in f.readlines() if line.strip()]
+        labels = [line.strip() for line in f.readlines()]
     
     path_to_labelpbtxt = os.path.join(os.getcwd(), 'labelmap.pbtxt')
     with open(path_to_labelpbtxt,'w') as f:
